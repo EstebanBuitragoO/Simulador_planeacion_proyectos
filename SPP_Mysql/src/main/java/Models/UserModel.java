@@ -6,7 +6,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "users")
 @Access(AccessType.FIELD)
-public class User implements Serializable {
+public class UserModel implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,10 +24,15 @@ public class User implements Serializable {
     @Column(name = "name", nullable = false, length = 120)
     private String name;
 
-    public User() {
+    public UserModel() {
     }
 
-    public User(String email, String password, String name) {
+    public UserModel(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
+    public UserModel(String email, String password, String name) {
         this.email = email;
         this.password = password;
         this.name = name;

@@ -1,21 +1,24 @@
 
 package Services;
 
-import Controllers.UserJpaController;
-import Models.User;
+import Models.UserModel;
+import ORM.UserORM;
 
 public class UserService {
-    UserJpaController uc = new UserJpaController();
+    UserORM userORM = new UserORM();
 
-    public String validateUser(String email, String pass) {
+    public String validateUser(UserModel user) {
+        if (user.getEmail() == null || user.getPassword() == null || user.getEmail().isBlank() || user.getPassword().isBlank()) {
+            return "Email y contraseña son requeridos";
+        }
         
-        User user = uc.findByEmail(email);
+        UserModel resultUser = userORM.findByEmail(user.getEmail());
         
-        if (user == null) {
+        if (resultUser == null) {
             return "Usuario no encontrado";
         }
         
-        if (!user.getPassword().equals(pass)) {
+        if (!resultUser.getPassword().equals(user.getPassword())) {
             return "Contraseña incorrecta";
         }
 
@@ -23,19 +26,17 @@ public class UserService {
         
     }
 
-    public String createUser(String email, String pass, String name) {
-        System.out.println("aca");
-        System.out.println(email);
-        System.out.println(pass);
-        System.out.println(name);
+    public String createUser(UserModel user) {
         try {
-            User user = new User(email, pass, name);
-            System.out.println(user);
-            uc.create(user);
+            userORM.create(user);
             return "Usuario creado exitosamente";
         } catch (Exception e) {
             return("Error al crear usuario: " + e);
         }
-        
+
+    }
+
+    public UserModel getUserByEmail(String email) {
+        return userORM.findByEmail(email);
     }
 }

@@ -1,21 +1,172 @@
-
 package Views;
 
-import Services.UserService;
+import Controllers.UserController;
+import Models.UserModel;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 
 
 public class JFAuth extends javax.swing.JFrame {
-    UserService userService;
+    UserController userController;
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(JFAuth.class.getName());
 
     public JFAuth() {
         initComponents();
-        userService = new UserService();
+        userController = new UserController();
         CardLayout cardLayoutAuth=(CardLayout) authPanel.getLayout();
         cardLayoutAuth.show(authPanel, "login");
+
+        setupPlaceholders();
+        fixFieldColors();
+        fixLayoutIssues();
+    }
+
+    private void setupPlaceholders() {
+        addPlaceholder(txtEmailLogin, "Ingrese su correo electrónico");
+        addPlaceholder(txtEmailRegister, "Ingrese su correo electrónico");
+        addPlaceholder(txtNickName, "Ingrese su nombre de usuario");
+        addPasswordPlaceholder(txtPasswordLogin, "Ingrese su contraseña");
+        addPasswordPlaceholder(txtPasswordRegister, "Ingrese su contraseña");
+        hideObsoleteLabels();
+    }
+
+    private void addPlaceholder(javax.swing.JTextField textField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(51, 51, 51);
+
+        textField.setText(placeholder);
+        textField.setForeground(placeholderColor);
+
+        textField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (textField.getText().equals(placeholder)) {
+                    textField.setText("");
+                    textField.setForeground(textColor);
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (textField.getText().isEmpty()) {
+                    textField.setText(placeholder);
+                    textField.setForeground(placeholderColor);
+                }
+            }
+        });
+    }
+
+    private void addPasswordPlaceholder(JPasswordField passwordField, String placeholder) {
+        Color placeholderColor = new Color(153, 153, 153);
+        Color textColor = new Color(51, 51, 51);
+
+        passwordField.setText(placeholder);
+        passwordField.setForeground(placeholderColor);
+        passwordField.setEchoChar((char) 0);
+
+        passwordField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (String.valueOf(passwordField.getPassword()).equals(placeholder)) {
+                    passwordField.setText("");
+                    passwordField.setForeground(textColor);
+                    passwordField.setEchoChar('•');
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (passwordField.getPassword().length == 0) {
+                    passwordField.setText(placeholder);
+                    passwordField.setForeground(placeholderColor);
+                    passwordField.setEchoChar((char) 0);
+                }
+            }
+        });
+    }
+
+    private void hideObsoleteLabels() {
+        if (titleUser != null) titleUser.setVisible(false);
+        if (titlePassword != null) titlePassword.setVisible(false);
+        if (titlePasswordLogin != null) titlePasswordLogin.setVisible(false);
+        if (titleNickname != null) titleNickname.setVisible(false);
+        if (txtEmailLogin2 != null) txtEmailLogin2.setVisible(false);
+    }
+
+    private void fixFieldColors() {
+        Color fieldColor = Color.WHITE;
+
+        txtEmailLogin.setBackground(fieldColor);
+        txtPasswordLogin.setBackground(fieldColor);
+        txtEmailRegister.setBackground(fieldColor);
+        txtPasswordRegister.setBackground(fieldColor);
+        txtNickName.setBackground(fieldColor);
+    }
+
+    private void fixLayoutIssues() {
+        try {
+            if (txtPasswordRegister != null && txtEmailRegister != null) {
+                txtPasswordRegister.setBounds(
+                    txtPasswordRegister.getX(),
+                    txtPasswordRegister.getY(),
+                    txtEmailRegister.getWidth(),
+                    txtPasswordRegister.getHeight()
+                );
+            }
+
+            if (jSeparator6 != null && txtNickName != null) {
+                jSeparator6.setBounds(
+                    txtNickName.getX(),
+                    txtNickName.getY() + txtNickName.getHeight() + 2,
+                    txtNickName.getWidth(),
+                    jSeparator6.getHeight()
+                );
+            }
+
+            if (jSeparator1 != null && txtEmailLogin != null) {
+                jSeparator1.setBounds(
+                    txtEmailLogin.getX(),
+                    txtEmailLogin.getY() + txtEmailLogin.getHeight() + 2,
+                    txtEmailLogin.getWidth(),
+                    jSeparator1.getHeight()
+                );
+            }
+
+            if (jSeparator2 != null && txtPasswordLogin != null) {
+                jSeparator2.setBounds(
+                    txtPasswordLogin.getX(),
+                    txtPasswordLogin.getY() + txtPasswordLogin.getHeight() + 2,
+                    txtPasswordLogin.getWidth(),
+                    jSeparator2.getHeight()
+                );
+            }
+
+            if (jSeparator3 != null && txtEmailRegister != null) {
+                jSeparator3.setBounds(
+                    txtEmailRegister.getX(),
+                    txtEmailRegister.getY() + txtEmailRegister.getHeight() + 2,
+                    txtEmailRegister.getWidth(),
+                    jSeparator3.getHeight()
+                );
+            }
+
+            if (jSeparator4 != null && txtPasswordRegister != null) {
+                jSeparator4.setBounds(
+                    txtPasswordRegister.getX(),
+                    txtPasswordRegister.getY() + txtPasswordRegister.getHeight() + 2,
+                    txtPasswordRegister.getWidth(),
+                    jSeparator4.getHeight()
+                );
+            }
+
+        } catch (Exception e) {
+            logger.warning("Error ajustando layout: " + e.getMessage());
+        }
     }
 
 
@@ -389,16 +540,39 @@ public class JFAuth extends javax.swing.JFrame {
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
         String email = txtEmailLogin.getText();
-        String pass = txtPasswordLogin.getText();
-        String userValidate = userService.validateUser(email, pass);
+        String pass = new String(txtPasswordLogin.getPassword());
 
-        JOptionPane.showMessageDialog(this, userValidate);
+        if (email.equals("Ingrese su correo electrónico") || email.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese su correo electrónico");
+            return;
+        }
+
+        if (pass.trim().isEmpty() || pass.equals("Ingrese su contraseña")) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese su contraseña");
+            return;
+        }
+
+        String userValidate = userController.validateUser(email, pass);
+
+        if (userValidate.equals("Login exitoso")) {
+            UserModel user = userController.getUserByEmail(email);
+            if (user != null) {
+                this.dispose();
+                new MainDashboard(user).setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al obtener datos del usuario");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, userValidate);
+        }
 
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void registerLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerLinkActionPerformed
         CardLayout cardLayoutAuth =(CardLayout) authPanel.getLayout();
         cardLayoutAuth.show(authPanel, "register");
+
+        javax.swing.SwingUtilities.invokeLater(() -> fixLayoutIssues());
     }//GEN-LAST:event_registerLinkActionPerformed
 
     private void txtEmailLogin2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailLogin2ActionPerformed
@@ -417,14 +591,31 @@ public class JFAuth extends javax.swing.JFrame {
 
         CardLayout cardLayoutAuth =(CardLayout) authPanel.getLayout();
         cardLayoutAuth.show(authPanel, "login");
+
+        javax.swing.SwingUtilities.invokeLater(() -> fixLayoutIssues());
     }//GEN-LAST:event_loginLinkActionPerformed
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
-        String email = txtEmailLogin.getText();
-        String pass = txtPasswordLogin.getText();
+        String email = txtEmailRegister.getText();
+        String pass = new String(txtPasswordRegister.getPassword());
         String name = txtNickName.getText();
-        String resultado = userService.createUser(email, pass, name);
 
+        if (email.equals("Ingrese su correo electrónico") || email.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese su correo electrónico");
+            return;
+        }
+
+        if (pass.trim().isEmpty() || pass.equals("Ingrese su contraseña")) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese su contraseña");
+            return;
+        }
+
+        if (name.equals("Ingrese su nombre de usuario") || name.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor ingrese su nombre de usuario");
+            return;
+        }
+
+        String resultado = userController.createUser(email, pass, name);
         JOptionPane.showMessageDialog(this, resultado);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
