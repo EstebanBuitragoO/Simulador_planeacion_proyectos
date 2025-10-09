@@ -1,6 +1,7 @@
 package Services;
 
 import Models.ProjectModel;
+import Models.TaskModel;
 import ORM.ProjectORM;
 import java.util.List;
 
@@ -40,5 +41,28 @@ public class ProjectService {
 
     public List<ProjectModel> getAllProjects() {
         return projectORM.findAll();
+    }
+
+    public ProjectModel.Risk calculateRisk(List<TaskModel> tasks) {
+        if (tasks == null || tasks.isEmpty()) {
+            return ProjectModel.Risk.BAJO;
+        }
+
+        long overdueTasks = 0;
+        for (TaskModel task : tasks) {
+            if (task.isOverdue()) {
+                overdueTasks++;
+            }
+        }
+
+        double overduePercentage = (double) overdueTasks / tasks.size() * 100;
+
+        if (overduePercentage > 30) {
+            return ProjectModel.Risk.ALTO;
+        } else if (overduePercentage > 10) {
+            return ProjectModel.Risk.MEDIO;
+        } else {
+            return ProjectModel.Risk.BAJO;
+        }
     }
 }

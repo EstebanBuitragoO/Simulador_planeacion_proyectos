@@ -25,4 +25,8 @@ public class UserController {
     public UserModel getUserByEmail(String email){
         return userService.getUserByEmail(email);
     }
+
+    public java.util.List<UserModel> getAllUsers(){
+        return userService.getAllUsers();
+    }
 }

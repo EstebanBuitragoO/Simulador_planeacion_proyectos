@@ -67,7 +67,7 @@ public class UserORM {
         EntityManager em = em();
         try {
             return em.createQuery("SELECT u FROM UserModel u WHERE u.email = :e", UserModel.class)
-                     .setParameter("e", email.trim().toLowerCase())
+                     .setParameter("e", email)
                      .setMaxResults(1)
                      .getResultStream()
                      .findFirst()

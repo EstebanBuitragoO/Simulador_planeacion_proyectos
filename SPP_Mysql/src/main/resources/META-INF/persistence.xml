@@ -5,7 +5,6 @@
     <class>Models.UserModel</class>
     <class>Models.ProjectModel</class>
     <class>Models.TaskModel</class>
-    <class>Models.DependencyModel</class>
     <properties>
       <!-- Conexión -->
       <property name="javax.persistence.jdbc.driver" value="org.mariadb.jdbc.Driver"/>
@@ -15,8 +14,9 @@
       <!-- CLAVE: decirle que es MySQL/MariaDB -->
       <property name="eclipselink.target-database" value="org.eclipse.persistence.platform.database.MySQLPlatform"/>
       <!-- Para que cree tablas correctas durante desarrollo -->
-      <property name="eclipselink.ddl-generation" value="create-tables"/>
+      <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
       <property name="eclipselink.logging.level" value="INFO"/>
+      <property name="eclipselink.ddl-generation.output-mode" value="database"/>
     </properties>
   </persistence-unit>
 </persistence>

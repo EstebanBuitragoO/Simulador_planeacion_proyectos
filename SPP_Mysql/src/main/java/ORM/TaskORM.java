@@ -60,4 +60,16 @@ public class TaskORM {
                 .getResultList();
         } finally { em.close(); }
     }
+
+    public List<TaskModel> findByProjectAndStatus(Long projectId, TaskModel.Status status) {
+        EntityManager em = em();
+        try {
+            return em.createQuery(
+                    "SELECT t FROM TaskModel t WHERE t.project.id = :pid AND t.status = :status ORDER BY t.id",
+                    TaskModel.class)
+                .setParameter("pid", projectId)
+                .setParameter("status", status)
+                .getResultList();
+        } finally { em.close(); }
+    }
 }

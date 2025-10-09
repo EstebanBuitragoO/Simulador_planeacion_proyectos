@@ -11,23 +11,26 @@ public class UserService {
         if (user.getEmail() == null || user.getPassword() == null || user.getEmail().isBlank() || user.getPassword().isBlank()) {
             return "Email y contraseña son requeridos";
         }
-        
-        UserModel resultUser = userORM.findByEmail(user.getEmail());
-        
+
+        String normalizedEmail = user.getEmail().trim().toLowerCase();
+        UserModel resultUser = userORM.findByEmail(normalizedEmail);
+
         if (resultUser == null) {
             return "Usuario no encontrado";
         }
-        
+
         if (!resultUser.getPassword().equals(user.getPassword())) {
             return "Contraseña incorrecta";
         }
 
         return "Login exitoso";
-        
+
     }
 
     public String createUser(UserModel user) {
         try {
+            String normalizedEmail = user.getEmail().trim().toLowerCase();
+            user.setEmail(normalizedEmail);
             userORM.create(user);
             return "Usuario creado exitosamente";
         } catch (Exception e) {
@@ -37,6 +40,11 @@ public class UserService {
     }
 
     public UserModel getUserByEmail(String email) {
-        return userORM.findByEmail(email);
+        String normalizedEmail = email.trim().toLowerCase();
+        return userORM.findByEmail(normalizedEmail);
+    }
+
+    public java.util.List<UserModel> getAllUsers() {
+        return userORM.findAll();
     }
 }

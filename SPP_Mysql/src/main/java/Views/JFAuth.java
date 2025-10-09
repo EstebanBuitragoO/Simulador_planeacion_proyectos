@@ -24,6 +24,7 @@ public class JFAuth extends javax.swing.JFrame {
         setupPlaceholders();
         fixFieldColors();
         fixLayoutIssues();
+        setupEnterKeyListeners();
     }
 
     private void setupPlaceholders() {
@@ -169,9 +170,18 @@ public class JFAuth extends javax.swing.JFrame {
         }
     }
 
+    private void setupEnterKeyListeners() {
+        txtEmailLogin.addActionListener(e -> btnLogin.doClick());
+        txtPasswordLogin.addActionListener(e -> btnLogin.doClick());
+
+        txtEmailRegister.addActionListener(e -> btnRegister.doClick());
+        txtPasswordRegister.addActionListener(e -> btnRegister.doClick());
+        txtNickName.addActionListener(e -> btnRegister.doClick());
+    }
+
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    //GEN-BEGIN:initComponents
     private void initComponents() {
 
         authPanel = new javax.swing.JPanel();
@@ -224,9 +234,11 @@ public class JFAuth extends javax.swing.JFrame {
         txtLogin.setText("Iniciar sesion");
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(30, 63, 98));
         jLabel2.setText("USUARIO");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(30, 63, 98));
         jLabel3.setText("CONTRASEÑA");
 
         txtEmailLogin.setBackground(new java.awt.Color(242, 242, 242));
@@ -238,8 +250,9 @@ public class JFAuth extends javax.swing.JFrame {
         txtPasswordLogin.setBorder(null);
         txtPasswordLogin.setPreferredSize(new java.awt.Dimension(64, 28));
 
-        btnLogin.setBackground(new java.awt.Color(255, 102, 0));
-        btnLogin.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnLogin.setBackground(new java.awt.Color(255, 101, 0));
+        btnLogin.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("ENTRAR");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,9 +371,11 @@ public class JFAuth extends javax.swing.JFrame {
         txtRegister.setText("Registro");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(30, 63, 98));
         jLabel4.setText("USUARIO");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(30, 63, 98));
         jLabel5.setText("CONTRASEÑA");
 
         txtEmailRegister.setBackground(new java.awt.Color(242, 242, 242));
@@ -373,8 +388,9 @@ public class JFAuth extends javax.swing.JFrame {
         txtPasswordRegister.setMinimumSize(new java.awt.Dimension(64, 14));
         txtPasswordRegister.setPreferredSize(new java.awt.Dimension(64, 14));
 
-        btnRegister.setBackground(new java.awt.Color(255, 102, 0));
-        btnRegister.setFont(new java.awt.Font("Segoe UI Semibold", 0, 12)); // NOI18N
+        btnRegister.setBackground(new java.awt.Color(255, 101, 0));
+        btnRegister.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        btnRegister.setForeground(new java.awt.Color(255, 255, 255));
         btnRegister.setText("REGISTRAR");
         btnRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -408,6 +424,7 @@ public class JFAuth extends javax.swing.JFrame {
         );
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(30, 63, 98));
         jLabel6.setText("NOMBRE DE USUARIO");
 
         txtNickName.setBackground(new java.awt.Color(242, 242, 242));
@@ -535,7 +552,7 @@ public class JFAuth extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
 
@@ -558,7 +575,10 @@ public class JFAuth extends javax.swing.JFrame {
             UserModel user = userController.getUserByEmail(email);
             if (user != null) {
                 this.dispose();
-                new MainDashboard(user).setVisible(true);
+                JMainDashboard jMainDashboard = new JMainDashboard(user);
+                jMainDashboard.setVisible(true);
+                jMainDashboard.pack();
+                jMainDashboard.setLocationRelativeTo(null);
             } else {
                 JOptionPane.showMessageDialog(this, "Error al obtener datos del usuario");
             }
@@ -576,15 +596,12 @@ public class JFAuth extends javax.swing.JFrame {
     }//GEN-LAST:event_registerLinkActionPerformed
 
     private void txtEmailLogin2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailLogin2ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtEmailLogin2ActionPerformed
 
     private void titlePasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titlePasswordActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_titlePasswordActionPerformed
 
     private void txtNickNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNickNameActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtNickNameActionPerformed
 
     private void loginLinkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginLinkActionPerformed
@@ -622,10 +639,6 @@ public class JFAuth extends javax.swing.JFrame {
 
     public static void main(String args[]) {
 
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -636,12 +649,11 @@ public class JFAuth extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
         java.awt.EventQueue.invokeLater(() -> new JFAuth().setVisible(true));
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    //GEN-BEGIN:variables
     private javax.swing.JPanel authPanel;
     private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnRegister;
@@ -673,5 +685,5 @@ public class JFAuth extends javax.swing.JFrame {
     private javax.swing.JPasswordField txtPasswordLogin;
     private javax.swing.JPasswordField txtPasswordRegister;
     private javax.swing.JLabel txtRegister;
-    // End of variables declaration//GEN-END:variables
+    //GEN-END:variables
 }
