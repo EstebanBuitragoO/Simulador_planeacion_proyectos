@@ -14,6 +14,7 @@
         <!-- Pon aquí la versión de tu JDK real: 17 o 21 -->
         <maven.compiler.release>17</maven.compiler.release>
         <exec.mainClass>spp_mysql.SPP_Mysql</exec.mainClass>
+        <sonar.organization>estebanbuitragoo</sonar.organization>
     </properties>
 
     <dependencies>
